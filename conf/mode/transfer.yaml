@@ -1,0 +1,3 @@
+
+from_scratch: false
+pretrained_model_name: "hustvl/yolos-tiny"

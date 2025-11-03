@@ -1,0 +1,2 @@
+model_config: "yolos.yaml"
+num_labels: 2

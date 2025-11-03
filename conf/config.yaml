@@ -1,0 +1,10 @@
+defaults:
+  - _self_
+  - dataset: custom
+  - model: yolo_v8_segmentation
+  - training: default
+  - mode: transfer_v8seg  # Default mode is transfer learning
+
+# You can add general project settings here
+project_name: mcherry_mkate_live_worms_yolos
+run_name: ${now:%Y-%m-%d_%H-%M-%S}

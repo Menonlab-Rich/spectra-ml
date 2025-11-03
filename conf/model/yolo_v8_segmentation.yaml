@@ -1,0 +1,2 @@
+model_config: "yolov8n-seg.yaml"
+num_labels: 2 # Or however many classes you have

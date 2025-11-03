@@ -1,0 +1,3 @@
+[submodule "coco-viewer"]
+	path = coco-viewer
+	url = https://github.com/trsvchn/coco-viewer.git

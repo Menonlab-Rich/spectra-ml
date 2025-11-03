@@ -1,0 +1,7 @@
+names:
+- mkate
+- mcherry
+nc: 2
+path: /home/rich/code/spectra/dataset
+train: train/images
+val: test/images

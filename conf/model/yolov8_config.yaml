@@ -1,0 +1,15 @@
+# ------------------------------------------------------------------
+# my_dataset.yaml
+# ------------------------------------------------------------------
+path: /home/rich/code/spectra/dataset 
+
+# Train/val image directories (relative to 'path')
+train: train/images
+val: test/images
+
+# --- Class definitions ---
+# Number of classes in your dataset
+nc: 2 
+
+# Class names in the correct order (0=background, 1=person, etc.)
+names: ['mkate', 'mcherry'] 

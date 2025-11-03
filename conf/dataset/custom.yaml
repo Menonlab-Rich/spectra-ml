@@ -1,0 +1,5 @@
+name: mcherry_mkate_worms
+annotations_path: ${expanduser:"~/code/metavision/coco_dataset/annotations/annotations.json"}
+image_directory: ${expanduser:"~/code/metavision/coco_dataset/images/"}
+download: false
+
