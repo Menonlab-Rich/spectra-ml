@@ -17,6 +17,8 @@ parser.add_argument('--base-path', type=str, default=None,
 parser.add_argument('--split-ratio', type=float, default=0.8,
                     help="The ratio for the training set split (e.g., 0.8 for an 80/20 split).")
 
+parser.add_argument('--output-directory', type=str, default=None, help="The root of the output directory")
+
 args = parser.parse_args()
 
 # --- Configuration (now from command line) ---
@@ -25,21 +27,25 @@ SOURCE_LABELS_DIR = args.source_labels
 CONFIG_YAML_PATH = args.config
 BASE_PATH_ARG = args.base_path
 SPLIT_RATIO = args.split_ratio
+OUTPUT_DIR = args.output_directory
 
-# 2. Load the dataset configuration file ⚙️
+# 2. Load the dataset configuration file
 print(f"Loading configuration from: {CONFIG_YAML_PATH}")
 with open(CONFIG_YAML_PATH, 'r') as f:
     config = yaml.safe_load(f)
 
 # --- Determine the final output base path ---
-output_base_path_str = config['path']
+output_base_path_str = config['path'] if not OUTPUT_DIR else OUTPUT_DIR
 if BASE_PATH_ARG and not os.path.isabs(output_base_path_str):
     print(f"Path in config is relative. Joining with provided base path: {BASE_PATH_ARG}")
     base_path = Path(BASE_PATH_ARG) / output_base_path_str
 else:
     base_path = Path(output_base_path_str)
 
-# 3. Load the source dataset using supervision 📚
+print(f"Source Images Dir: {SOURCE_IMAGES_DIR}")
+print(f"Source Labels Dir: {SOURCE_LABELS_DIR}")
+
+# 3. Load the source dataset using supervision
 print("Loading source dataset...")
 ds = sv.DetectionDataset.from_yolo(
     images_directory_path=SOURCE_IMAGES_DIR,
@@ -48,7 +54,7 @@ ds = sv.DetectionDataset.from_yolo(
     force_masks=True
 )
 
-# 4. Split the dataset into training and testing sets ✂️
+# 4. Split the dataset into training and testing sets
 train_ds, test_ds = ds.split(split_ratio=SPLIT_RATIO, random_state=42, shuffle=True)
 
 print("-" * 30)
@@ -57,13 +63,19 @@ print(f"Training set size: {len(train_ds)}")
 print(f"Test set size: {len(test_ds)}")
 print("-" * 30)
 
-# 5. Construct full output paths from the YAML config 🗺️
-train_images_path = base_path / config['train']
+# 5. Construct full output paths from the YAML config
+train_images_path = base_path / config['train'] / 'images'
 train_labels_path = train_images_path.parent / 'labels'
-test_images_path = base_path / config['val']
+test_images_path = base_path / config['val'] / 'images'
 test_labels_path = test_images_path.parent / 'labels'
 
-# 6. Save the split datasets to the configured locations 💾
+print(f"Train Images Path: {train_images_path}")
+print(f"Train Labels Path: {train_labels_path}")
+print(f"Test Images Path: {test_images_path}")
+print(f"Test Labels Path: {test_labels_path}")
+
+
+# 6. Save the split datasets to the configured locations
 print(f"Saving training set to: {train_images_path.parent}")
 train_ds.as_yolo(
     images_directory_path=train_images_path,
