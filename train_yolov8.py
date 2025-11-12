@@ -2,15 +2,17 @@
 # train.py
 # ------------------------------------------------------------------
 import argparse
+from pathlib import Path
+from typing import Any
+
+import albumentations as A
 import torch
 import torch.nn.functional as F
 from ultralytics.models import YOLO, yolo
-import albumentations as A
 from ultralytics.nn.tasks import SegmentationModel
 from ultralytics.utils.loss import VarifocalLoss, v8SegmentationLoss
-from ultralytics.utils.tal import  make_anchors
-from typing import Any
-from pathlib import Path
+from ultralytics.utils.tal import make_anchors
+
 
 class CustomV8Loss(v8SegmentationLoss):
     def __init__(self, model):
@@ -201,6 +203,8 @@ if __name__ == '__main__':
     parser.add_argument('--patience', type=int, default=20, help='Stop training after n epochs of no improvement')
 
     args = parser.parse_args()
+    if args.batch > 1:
+        args.batch = int(args.batch)
 
     # Call the training function
     train_yolo(
